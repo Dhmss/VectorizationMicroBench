@@ -1,9 +1,9 @@
 hostname
 uname -sr
-project="${HOME}/workspace/vectorization"
-build="${project}/bin"
-JDK8="/home/nhalli/openjdk8/build/linux-x86_64-normal-server-release/images/j2sdk-image"
-classpath="${build}:/home/nhalli/yeppp-1.0.0/binaries/java-1.5/yeppp.jar:/home/nhalli/jol/jol-core/target/jol-core-1.0-SNAPSHOT.jar"
+project="${HOME}/git/vectorization/vectorization"
+build="${project}/build"
+JDK8="${HOME}/openjdk8/build/linux-x86_64-normal-server-release/images/j2sdk-image"
+classpath="${build}:/home/nhalli/yeppp-1.0.0/binaries/java-1.5/yeppp.jar"
 JDK_BIN="${JDK8}/bin"
 
 JAVAC="$JDK_BIN/javac"
@@ -40,7 +40,7 @@ fi
 
 opts="-cp $classpath -Dargs.Nb2=10 -Dargs.D=64 -Dargs.IT=10 -Dargs.WU=10"
 opts+=" -Xmx500m "
-opts+=" -Djava.library.path=/home/nhalli/yeppp-1.0.0/binaries/linux/x86_64:/home/nhalli/workspace/vectorization/dlib"
+opts+=" -Djava.library.path=/home/nhalli/yeppp-1.0.0/binaries/linux/x86_64:${PROJECT}/dlib"
 opts+=" -XX:ObjectAlignmentInBytes=64 -Dargs.alignment=6 "
 opts+=" -server -XX:+UnlockDiagnosticVMOptions -XX:-TieredCompilation -XX:-BackgroundCompilation -XX:CICompilerCount=1 -XX:CompileThreshold=1000 -XX:+UseOnStackReplacement" 
 opts+=" -XX:-PrintCompilation -XX:-PrintAssembly -XX:-PrintIntrinsics -XX:-PrintInlining -XX:-PrintCommandLineFlags -XX:-PrintTieredEvents" 
