@@ -1,0 +1,3 @@
+dontinline,polynomialComputation.polyEval::basic_nested
+dontinline,polynomialComputation.polyEval::basic_aligned
+dontinline,polynomialComputation.polyEval::basic_unaligned

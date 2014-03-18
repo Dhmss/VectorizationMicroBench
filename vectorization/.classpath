@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/j2sdk-image"/>
+	<classpathentry kind="lib" path="/home/nhalli/yeppp-1.0.0/binaries/java-1.5/yeppp.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/nhalli/yeppp-1.0.0/binaries/linux/x86_64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/nhalli/javacpp-bin/javacpp.jar"/>
+	<classpathentry kind="lib" path="/home/nhalli/jol/jol-core/target/jol-core-1.0-SNAPSHOT.jar" sourcepath="/home/nhalli/jol/jol-core/target/jol-core-1.0-SNAPSHOT-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/nhalli/jol/jol-core/target/jol-core-1.0-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
