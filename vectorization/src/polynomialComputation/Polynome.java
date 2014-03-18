@@ -2,7 +2,7 @@ package polynomialComputation;
 
 public class Polynome {
 
-	public double[] coef;
+	public final double[] coef;
 	public int deg;
 
 	public Polynome(double[] coef) {
@@ -22,9 +22,8 @@ public class Polynome {
 		return y;
 	}
 
-	public void computePacked(double[] x, double[] y) {
-
-		for (int i = 0; i < x.length; ++i)
+	public void computePackedu(double[] x, double[] y, int n) {
+		for (int i = 0; i < n; ++i)
 			y[i] = compute(x[i]);
 	}
 

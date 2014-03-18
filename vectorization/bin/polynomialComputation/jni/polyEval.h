@@ -47,6 +47,14 @@ JNIEXPORT void JNICALL Java_polynomialComputation_polyEval_registerNatives
 JNIEXPORT void JNICALL native_jni_avxu
 (JNIEnv *, jclass, jdoubleArray, jlong, jlong, jint, jint);
 
+/*
+ * Class:     polynomialComputation_polyEval
+ * Method:    native_jni_avxa
+ * Signature: ([DJJII)V
+ */
+JNIEXPORT void JNICALL native_jni_avxa
+(JNIEnv *, jclass, jdoubleArray, jlong, jlong, jint, jint);
+
 #ifdef __cplusplus
 }
 #endif

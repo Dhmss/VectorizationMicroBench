@@ -110,8 +110,9 @@ public class polyEval {
 		go_jni_avxu(coef, x, y);
 		go_jni_avxa(coef, x, y);
 		go_jni_basic(coef, x, y);
+		go_javastyle_unaligned(coef, x, y);
 		go_native_jni_avxu(coef, nx, ny);
-
+		go_native_jni_avxa(coef, nx, ny);
 	}
 
 	public static void go_basic(double[] coef, double[] x, double[] y) {
@@ -126,6 +127,28 @@ public class polyEval {
 		for (int i = 0; i < IT; ++i) {
 			long loct = System.nanoTime();
 			basic(coef, x, y, ALIGNMENT, N);
+			loct = System.nanoTime() - loct;
+			t = loct < t ? loct : t;
+		}
+
+		printResult(t);
+	}
+
+	public static void go_javastyle_unaligned(double[] coef, double[] x,
+			double[] y) {
+
+		System.out.println("\nJAVASTYLE_UNALIGNED");
+		Polynome p = new Polynome(coef);
+
+		for (int i = 0; i < WU; ++i)
+			p.computePackedu(x, y, N);
+
+		System.out.println("END WARMUP");
+
+		long t = Long.MAX_VALUE;
+		for (int i = 0; i < IT; ++i) {
+			long loct = System.nanoTime();
+			p.computePackedu(x, y, N);
 			loct = System.nanoTime() - loct;
 			t = loct < t ? loct : t;
 		}
@@ -237,6 +260,20 @@ public class polyEval {
 		for (int i = 0; i < IT; ++i) {
 			long loct = System.nanoTime();
 			native_jni_avxu(coef, x, y, D, N);
+			loct = System.nanoTime() - loct;
+			t = loct < t ? loct : t;
+		}
+
+		printResult(t);
+	}
+
+	public static void go_native_jni_avxa(double[] coef, long x, long y) {
+
+		System.out.println("\nNATIVE_JNI_AVX_ALIGNED");
+		long t = Long.MAX_VALUE;
+		for (int i = 0; i < IT; ++i) {
+			long loct = System.nanoTime();
+			native_jni_avxa(coef, x, y, D, N);
 			loct = System.nanoTime() - loct;
 			t = loct < t ? loct : t;
 		}
@@ -374,6 +411,9 @@ public class polyEval {
 			int degree, int vectorSize);
 
 	private static native void native_jni_avxu(double[] coef, long x, long y,
+			int degree, int vectorSize);
+
+	private static native void native_jni_avxa(double[] coef, long x, long y,
 			int degree, int vectorSize);
 
 	private static native void registerNatives();

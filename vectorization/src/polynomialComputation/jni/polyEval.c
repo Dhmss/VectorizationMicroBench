@@ -8,13 +8,15 @@
 
 const JNINativeMethod JNI_METHODS[] = {
 
-{ "jni_avxu", "([D[D[DII)V", (void *) &jni_avxu }, { "jni_basic", "([D[D[DII)V",
-		(void *) &jni_basic }, { "jni_avxa", "([D[D[DII)V", (void *) &jni_avxa },
-		{ "native_jni_avxu", "([DJJII)V", (void *) &native_jni_avxu }
+{ "jni_avxu", "([D[D[DII)V", (void *) &jni_avxu },
+{ "jni_basic", "([D[D[DII)V",(void *) &jni_basic },
+{ "jni_avxa", "([D[D[DII)V", (void *) &jni_avxa },
+{ "native_jni_avxu", "([DJJII)V", (void *) &native_jni_avxu },
+{ "native_jni_avxa", "([DJJII)V", (void *) &native_jni_avxa }
 
 };
 
-const int NB_JNI_METHODS = 4;
+const int NB_JNI_METHODS = 5;
 
 JNIEXPORT void JNICALL
 Java_polynomialComputation_polyEval_registerNatives(JNIEnv *env, jclass cls) {
@@ -144,6 +146,40 @@ native_jni_avxu(JNIEnv *env, jclass cls, jdoubleArray jcoef, jlong jx,
 			packedy = _mm256_mul_pd(packedy, packedx);
 			packedy = _mm256_add_pd(packedy, offsets);
 			_mm256_storeu_pd(yi, packedy);
+		}
+		for (; i < vectorSize; ++i) {
+			y[i] *= x[i];
+			y[i] += offset;
+		}
+	}
+
+	(*env)->ReleasePrimitiveArrayCritical(env, jcoef, coef, 0);
+}
+
+JNIEXPORT void JNICALL
+native_jni_avxa(JNIEnv *env, jclass cls, jdoubleArray jcoef, jlong jx,
+		jlong jy, jint degree, jint vectorSize) {
+
+	double* coef = (*env)->GetPrimitiveArrayCritical(env, jcoef, 0);
+	double* x = ((double*)jx) + 6;
+	double* y = ((double*)jy) + 6;
+
+	int i;
+	for (i = 0; i < vectorSize; ++i)
+		y[i] = coef[degree];
+	int boundavx = vectorSize - 4;
+	for (int d = degree - 1; d > -1; --d) {
+		double offset = coef[d];
+		__m256d packedy, packedx;
+		__m256d offsets = _mm256_broadcast_sd(&offset);
+		for (i = 0; i < boundavx; i += 4) {
+			double* yi = &(y[i]);
+			double* xi = &(x[i]);
+			packedx = _mm256_load_pd(xi);
+			packedy = _mm256_load_pd(yi);
+			packedy = _mm256_mul_pd(packedy, packedx);
+			packedy = _mm256_add_pd(packedy, offsets);
+			_mm256_store_pd(yi, packedy);
 		}
 		for (; i < vectorSize; ++i) {
 			y[i] *= x[i];
