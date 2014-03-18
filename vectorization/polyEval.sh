@@ -27,20 +27,20 @@ rm -rf build
 mkdir build
 fi
 
-$JAVAC -d "$project/build" -sourcepath "${PROJECT}/src" -classpath $classpath $javaFile
+$JAVAC -d "${project}/build" -sourcepath "${project}/src" -classpath $classpath $javaFile
 
 exit
 fi
 
 if [ "$1" = "-so" ]
 then
-gcc -O3 -m64 -mavx -Wall -std=c99 -ftree-vectorize -ftree-vectorizer-verbose=6 -o $project/dlib/libPolyEval.so -lc -shared -fPIC -I${JDK8}/include -I${JDK8}/include/linux $project/src/polynomialComputation/jni/polyEval.c
+gcc -O3 -m64 -mavx -Wall -std=c99 -ftree-vectorize -ftree-vectorizer-verbose=6 -o ${project}/dlib/libPolyEval.so -lc -shared -fPIC -I${JDK8}/include -I${JDK8}/include/linux $project/src/polynomialComputation/jni/polyEval.c
 exit
 fi
 
 opts="-cp $classpath -Dargs.Nb2=10 -Dargs.D=64 -Dargs.IT=10 -Dargs.WU=10"
 opts+=" -Xmx500m "
-opts+=" -Djava.library.path=/home/nhalli/yeppp-1.0.0/binaries/linux/x86_64:${PROJECT}/dlib"
+opts+=" -Djava.library.path=/home/nhalli/yeppp-1.0.0/binaries/linux/x86_64:${project}/dlib"
 opts+=" -XX:ObjectAlignmentInBytes=64 -Dargs.alignment=6 "
 opts+=" -server -XX:+UnlockDiagnosticVMOptions -XX:-TieredCompilation -XX:-BackgroundCompilation -XX:CICompilerCount=1 -XX:CompileThreshold=1000 -XX:+UseOnStackReplacement" 
 opts+=" -XX:-PrintCompilation -XX:-PrintAssembly -XX:-PrintIntrinsics -XX:-PrintInlining -XX:-PrintCommandLineFlags -XX:-PrintTieredEvents" 
