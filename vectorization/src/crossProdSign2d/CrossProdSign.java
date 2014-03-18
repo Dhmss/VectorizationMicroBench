@@ -662,6 +662,46 @@ public class CrossProdSign {
 		return sl * sign;
 
 	}
+	
+	
+	public static int crossProdSign6(long l0, long l1, long r0, long r1) {
+
+		// return sign of s = l0*l1 - r0*r1 ;
+
+		// computing arguments sign
+		int sl0 = l0 == 0 ? 0 : l0 > 0 ? 1 : -1;
+		int sl1 = l1 == 0 ? 0 : l1 > 0 ? 1 : -1;
+		int sr0 = r0 == 0 ? 0 : r0 > 0 ? 1 : -1;
+		int sr1 = r1 == 0 ? 0 : r1 > 0 ? 1 : -1;
+
+		int sl = sl0 * sl1;
+		int s = sr0 * sr1 + sl;
+
+		// fail fast, if sign is determined
+		if (s == 0)
+			return sl;
+
+		// fail fast, if sign is determined
+		if (s == 1 || s == -1) {
+			return sl == 0 ? -s : s;
+		}
+
+		// (s == 2 | s == -2) ==> indeterminate case : computing in the form
+		// |l0||l1| - |r0||r1|
+
+		// computing absolute values
+		long al0 = sl0 == 1 ? l0 : -l0;
+		long al1 = sl1 == 1 ? l1 : -l1;
+		long ar0 = sr0 == 1 ? r0 : -r0;
+		long ar1 = sr1 == 1 ? r1 : -r1;
+
+		int sign = upperPartDomination(al0, al1, ar0, ar1);
+		if (sign == 0)
+			sign = crossProdSignpppp4(al0, al1, ar0, ar1);
+
+		return sl * sign;
+	}
+
 
 	private static int upperPartDomination(long l0, long l1, long r0, long r1) {
 
@@ -694,6 +734,28 @@ public class CrossProdSign {
 	}
 
 	private static int crossProdSignpppp(long l0, long l1, long r0, long r1) {
+
+		// all arguments must be positive
+		// computing right and left term's exponent dual (63 - exponent)
+		int zl = Long.numberOfLeadingZeros(l0) + Long.numberOfLeadingZeros(l1);
+		int zr = Long.numberOfLeadingZeros(r0) + Long.numberOfLeadingZeros(r1);
+
+		// checking an exponent domination
+		int diff = zr - zl;
+		if (diff > 1)
+			return 1; // left domination
+		if (diff < -1)
+			return -1; // right domination
+
+		// checking overflow risk
+		return zl < 65 ? (zr < 65 ? crossProdSignBI(l0, l1, r0, r1)
+				: crossProdSignBILeftRisk(l0, l1, r0 * r1))
+				: (zr < 65 ? -crossProdSignBILeftRisk(r0, r1, l0 * l1)
+						: crossProdSignLong(l0, l1, r0, r1));
+
+	}
+	
+	private static int crossProdSignpppp4(long l0, long l1, long r0, long r1) {
 
 		// all arguments must be positive
 		// computing right and left term's exponent dual (63 - exponent)
